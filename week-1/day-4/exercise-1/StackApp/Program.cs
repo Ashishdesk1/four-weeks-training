@@ -11,6 +11,8 @@
             //Console.WriteLine(intStack.Pop()); // Output: 3
             //Console.WriteLine(intStack.Pop()); // Output: 2
             //Console.WriteLine(intStack.IsEmpty()); // Output: False
+
+
         }
     }
-}
+} 
