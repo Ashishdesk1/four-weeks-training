@@ -1,30 +1,60 @@
-﻿namespace FileLoggerDisposableApp
+﻿using System;
+
+public interface IProcessor<in TInput, out TResult>
 {
-    internal class Program
+    TResult Process(TInput input);
+}
+
+public class Animal
+{
+    public string Name { get; set; }
+}
+
+public class Dog : Animal
+{
+    public void Bark()
     {
-        static void Main(string[] args)
-        {
-            // Use FileLogger and dispose of it properly
-        }
+        Console.WriteLine("Woof!");
     }
+}
 
-    class FileLogger : IDisposable
+public class Cat : Animal
+{
+    public void Meow()
     {
-        private StreamWriter _writer;
+        Console.WriteLine("Meow!");
+    }
+}
 
-        public FileLogger(string filePath)
-        {
-            // Initialize StreamWriter instance
-        }
+public class AnimalProcessor : IProcessor<Animal, string>
+{
+    public string Process(Animal input)
+    {
+        return $"Processing animal: {input.Name}";
+    }
+}
 
-        public void Dispose()
-        {
-            // Implement IDisposable pattern
-        }
+public class DogProcessor : IProcessor<Dog, string>
+{
+    public string Process(Dog input)
+    {
+        input.Bark();
+        return $"Processing dog: {input.Name}";
+    }
+}
 
-        public void Log(string message)
-        {
-            // Write message to the file
-        }
+public class Program
+{
+    static void Main(string[] args)
+    {
+        IProcessor<Dog, string> dogProcessor = new DogProcessor();
+        Dog dog = new Dog { Name = "Max" };
+        string resultDog = dogProcessor.Process(dog);
+        Console.WriteLine(resultDog);
+
+        IProcessor<Animal, string> animalProcessor = new AnimalProcessor();
+        Dog dog2 = new Dog { Name = "Buddy" };
+        string resultAnimal = animalProcessor.Process(dog2);
+        Console.WriteLine(resultAnimal);
     }
 }

@@ -1,79 +1,62 @@
-using NUnit.Framework;
+using System;
+using System.IO;
 
-namespace FactorialApp.Tests
+class FileLogger : IDisposable
 {
-    public class Tests
+    private StreamWriter _writer;
+    private bool _disposed = false;
+
+    public FileLogger(string filePath)
     {
-        [SetUp]
-        public void Setup()
+        _writer = new StreamWriter(filePath, true);
+    }
 
-
-        [Test]
-        public void CalculateFactorial_InputPositiveNumber_ReturnsCorrectFactorial()
+    public void Log(string message)
+    {  
+        if (_disposed)
         {
-            // Arrange
-            int number = 5;
-            long expectedFactorial = 120;
-
-            // Act
-            long actualFactorial = Program.CalculateFactorial(number);
-
-            // Assert
-            Assert.That(actualFactorial, Is.EqualTo(expectedFactorial));
+            throw new ObjectDisposedException("FileLogger", "Cannot write to a disposed FileLogger instance.");
         }
 
-        [Test]
-        public void CalculateFactorial_InputZero_ReturnsOne()
+        _writer.WriteLine($"{DateTime.Now}: {message}");
+    }
+
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
         {
-            // Arrange
-            int number = 0;
-            long expectedFactorial = 1;
+            if (disposing)
+            {
+                _writer.Dispose();
+            }
 
-            // Act
-            long actualFactorial = Program.CalculateFactorial(number);
+            _disposed = true;
+        }
+    }
 
-            // Assert
-            Assert.That(actualFactorial, Is.EqualTo(expectedFactorial));
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    ~FileLogger()
+    {
+        Dispose(false);
+    }
+}
+class Program
+{
+    static void Main(string[] args)
+    {
+        using (var logger = new FileLogger("log.txt"))
+        {
+            logger.Log("Log entry 1");
+            logger.Log("Log entry 2");
+            logger.Log("Log entry 3");
         }
 
-        [Test]
-        public void CalculateFactorial_InputNegativeNumber_ThrowsArgumentException()
-        {
-            // Arrange
-            int number = -5;
-
-            // Act & Assert
-            Assert.Throws<System.ArgumentException>(() => Program.CalculateFactorial(number));
-        }
-
-        [Test]
-        public void CalculateFactorial_InputOne_ReturnsOne()
-        {
-            // Arrange
-            int number = 1;
-            long expectedFactorial = 1;
-
-            // Act
-            long actualFactorial = Program.CalculateFactorial(number);
-
-            // Assert
-            Assert.That(actualFactorial, Is.EqualTo(expectedFactorial));                
-        }
-
-        [Test]
-        public void CalculateFactorial_InputLargeNumber_ReturnsCorrectFactorial()
-        {
-            // Arrange
-            int number = 20;
-            long expectedFactorial = 2432902008176640000;
-
-            // Act
-            long actualFactorial = Program.CalculateFactorial(number);
-
-            // Assert
-            Assert.That(actualFactorial, Is.EqualTo(expectedFactorial));            
-        }
-
-
+        Console.WriteLine("Log entries written. FileLogger disposed.");
     }
 }
