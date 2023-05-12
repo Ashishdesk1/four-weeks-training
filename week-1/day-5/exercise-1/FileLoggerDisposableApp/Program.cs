@@ -13,6 +13,7 @@ public class StringToIntProcessor : IProcessor<string, int>
         return input.Length;
     }
 }
+
 // Create a class called "DoubleToStringProcessor" that implements "IProcessor<double, string>" and returns the string representation of the input double
 public class DoubleToStringProcessor : IProcessor<double, string>
 {
