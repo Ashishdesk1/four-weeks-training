@@ -21,6 +21,7 @@ public class DoubleToStringProcessor : IProcessor<double, string>
         return input.ToString();
     }
 }
+
 class Program
 {
     static void Main(string[] args)
