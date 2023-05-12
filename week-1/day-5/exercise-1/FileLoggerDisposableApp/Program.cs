@@ -1,60 +1,35 @@
 ﻿using System;
-
+using System.IO;
+// Create an interface called "IProcessor<in TInput, out TResult>" with a single method "TResult Process(TInput input)".
 public interface IProcessor<in TInput, out TResult>
 {
     TResult Process(TInput input);
 }
-
-public class Animal
+// Create a class called "StringToIntProcessor" that implements "IProcessor<string, int>" and returns the length of the input string.
+public class StringToIntProcessor : IProcessor<string, int>
 {
-    public string Name { get; set; }
-}
-
-public class Dog : Animal
-{
-    public void Bark()
+    public int Process(string input)
     {
-        Console.WriteLine("Woof!");
+        return input.Length;
     }
 }
-
-public class Cat : Animal
+// Create a class called "DoubleToStringProcessor" that implements "IProcessor<double, string>" and returns the string representation of the input double
+public class DoubleToStringProcessor : IProcessor<double, string>
 {
-    public void Meow()
+    public string Process(double input)
     {
-        Console.WriteLine("Meow!");
+        return input.ToString();
     }
 }
-
-public class AnimalProcessor : IProcessor<Animal, string>
-{
-    public string Process(Animal input)
-    {
-        return $"Processing animal: {input.Name}";
-    }
-}
-
-public class DogProcessor : IProcessor<Dog, string>
-{
-    public string Process(Dog input)
-    {
-        input.Bark();
-        return $"Processing dog: {input.Name}";
-    }
-}
-
-public class Program
+class Program
 {
     static void Main(string[] args)
     {
-        IProcessor<Dog, string> dogProcessor = new DogProcessor();
-        Dog dog = new Dog { Name = "Max" };
-        string resultDog = dogProcessor.Process(dog);
-        Console.WriteLine(resultDog);
-
-        IProcessor<Animal, string> animalProcessor = new AnimalProcessor();
-        Dog dog2 = new Dog { Name = "Buddy" };
-        string resultAnimal = animalProcessor.Process(dog2);
-        Console.WriteLine(resultAnimal);
+        StringToIntProcessor stringToIntProcessor = new StringToIntProcessor();
+        int output1 = stringToIntProcessor.Process("Ashish");
+        Console.WriteLine(output1);
+        DoubleToStringProcessor doubleToStringProcessor = new DoubleToStringProcessor();
+        string output2 = doubleToStringProcessor.Process(3.14);
+        Console.WriteLine(output2);
     }
 }
