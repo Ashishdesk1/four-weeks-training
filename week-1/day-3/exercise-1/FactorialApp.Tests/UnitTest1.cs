@@ -6,8 +6,7 @@ namespace FactorialApp.Tests
     {
         [SetUp]
         public void Setup()
-        {
-        }
+
 
         [Test]
         public void CalculateFactorial_InputPositiveNumber_ReturnsCorrectFactorial()
@@ -74,6 +73,7 @@ namespace FactorialApp.Tests
             // Assert
             Assert.That(actualFactorial, Is.EqualTo(expectedFactorial));            
         }
+
 
     }
 }
